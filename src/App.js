@@ -6,6 +6,7 @@ import Header from './components/Header';
 import Home from './components/Home';
 import NotFound from './components/NotFound';
 import Details from './components/Details';
+import DetailItem from './components/DetailItem';
 
 function App() {
   const [items, setItems] = useState([]);
@@ -19,13 +20,18 @@ function App() {
   return (
     <Router>
       <Header />
-      <Routes>
-        <Route path="/details" element={<Details items={items} />}>
-          <Route path=":id" element={<div><p>Detail Items</p></div>} />
-        </Route>
-        <Route path="/" element={<Home items={items} />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+      {items.length === 0
+        ? <div>Loading...</div>
+        : (
+          <Routes>
+            <Route path="/details" element={<Details items={items} />}>
+              <Route path=":id" element={<DetailItem items={items} />} />
+              <Route index element={<div>No Element Selected</div>} />
+            </Route>
+            <Route path="/" element={<Home items={items} />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        )}
     </Router>
   );
 }

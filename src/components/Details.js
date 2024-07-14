@@ -12,7 +12,12 @@ function Details({ items }) {
       <Outlet />
       <div className="details-component-sidebar">
         {items.map((item) => (
-          <Thumbnail key={item.itemId} image={itemImages[item.imageId]} title={item.title} />
+          <Thumbnail
+            key={item.itemId}
+            image={itemImages[item.imageId]}
+            title={item.title}
+            itemId={item.itemId}
+          />
         ))}
       </div>
     </div>

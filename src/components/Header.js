@@ -1,11 +1,15 @@
+/* eslint-disable import/no-extraneous-dependencies */
+import { Link } from 'react-router-dom';
 import CoffeeLogo from '../images/logo.svg';
 import './Header.css';
 
 function Header() {
   return (
     <header className="header-component">
-      <img src={CoffeeLogo} alt="coffee-logo" />
-      <h1>Code Café</h1>
+      <Link to="/">
+        <img src={CoffeeLogo} alt="coffee-logo" />
+        <h1>Code Café</h1>
+      </Link>
     </header>
   );
 }

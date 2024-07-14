@@ -9,7 +9,12 @@ function Home({ items }) {
   return (
     <div className="home-component">
       {items.map((item) => (
-        <Thumbnail key={item.itemId} image={itemImages[item.itemId]} title={item.title} />
+        <Thumbnail
+          key={item.itemId}
+          image={itemImages[item.itemId]}
+          title={item.title}
+          itemId={item.itemId}
+        />
       ))}
     </div>
   );
