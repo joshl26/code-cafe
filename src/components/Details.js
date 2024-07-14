@@ -24,8 +24,6 @@ function Details({ items }) {
   );
 }
 
-Details.propTypes = {
-  items: PropTypes.arrayOf(ItemType).isRequired,
-};
+Details.propTypes = PropTypes.arrayOf(ItemType).isRequired;
 
 export default Details;

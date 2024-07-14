@@ -20,8 +20,6 @@ function Home({ items }) {
   );
 }
 
-Home.propTypes = {
-  items: PropTypes.arrayOf(ItemType).isRequired,
-};
+Home.propTypes = PropTypes.arrayOf(ItemType).isRequired;
 
 export default Home;
