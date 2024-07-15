@@ -8,6 +8,7 @@ import NotFound from './components/NotFound';
 import { cartReducer, CartTypes, initialCartState } from './reducers/cartReducer';
 import Details from './components/Details';
 import DetailItem from './components/DetailItem';
+import Cart from './components/Cart';
 
 function App() {
   const [items, setItems] = useState([]);
@@ -29,6 +30,7 @@ function App() {
         ? <div>Loading...</div>
         : (
           <Routes>
+            <Route path="/cart" element={<Cart cart={cart} items={items} />} />
             <Route path="/details" element={<Details items={items} />}>
               <Route path=":id" element={<DetailItem items={items} addToCart={addToCart} />} />
               <Route index element={<div>No Element Selected</div>} />

@@ -15,7 +15,7 @@ export const cartReducer = (state, action) => {
       }
       return [
         ...state,
-        { itemId: action.itemId, quantity: 1 },
+        { id: action.itemId, quantity: 1 },
       ];
     default:
       throw new Error(`Invalid action type ${action.type}`);
