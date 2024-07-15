@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
 import ItemType from '../types/item';
 import './Cart.css';
+import CartRow from './CartRow';
 
 function Cart({ cart, items }) {
-  console.log(cart);
-  console.log({ items });
+  // console.log(cart);
+  // console.log({ items });
 
   return (
     <div className="cart-component">
@@ -18,10 +19,11 @@ function Cart({ cart, items }) {
         </thead>
         <tbody>
           {cart.map((item) => (
-            <tr key={item.id.itemId}>
-              <td>{item.quantity}</td>
-              <td>{items.find((i) => i.itemId === item.id.itemId).title}</td>
-            </tr>
+            <CartRow key={item.itemId} cartItem={item} items={items} />
+            // <tr key={item.id.itemId}>
+            //   <td>{item.quantity}</td>
+            //   <td>{items.find((i) => i.itemId === item.id.itemId).title}</td>
+            // </tr>
           ))}
         </tbody>
       </table>
