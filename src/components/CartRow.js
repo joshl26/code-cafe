@@ -2,28 +2,28 @@ import PropTypes from 'prop-types';
 import ItemType from '../types/item';
 
 function CartRow({ cartItem, items }) {
-  console.log({ cartItem });
-  console.log(items);
+  // console.log({ cartItem });
+  // console.log(items);
 
-  // const item = items.find((i) => i.itemId === cartItem.itemId);
+  const item = items.find((i) => i.itemId === cartItem.id.itemId);
 
   // console.log(item);
 
   return (
     <tr>
-      {/* <td>{cartItem.quantity}</td>
+      <td>{cartItem.quantity}</td>
       <td>{item.title}</td>
       <td>
         $
         {((item.salePrice ?? item.price) * cartItem.quantity).toFixed(2)}
-      </td> */}
+      </td>
     </tr>
   );
 }
 
 CartRow.propTypes = {
   cartItem: PropTypes.shape({
-    itemId: PropTypes.string.isRequired,
+    id: { itemId: PropTypes.string.isRequired },
     quantity: PropTypes.number.isRequired,
   }).isRequired,
   items: PropTypes.arrayOf(ItemType).isRequired,

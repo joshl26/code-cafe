@@ -8,11 +8,12 @@ export const CartTypes = {
 
 export const cartReducer = (state, action) => {
   console.log(state);
+  console.log(action);
 
   switch (action.type) {
     case CartTypes.ADD:
       if (findItem(state, action.itemId)) {
-        return state.map((item) => (item.itemId === action.itemId
+        return state.map((item) => (item.id.itemId === action.itemId
           ? { ...item, quantity: item.quantity + 1 } : item));
       }
       return [
