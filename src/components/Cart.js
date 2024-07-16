@@ -18,7 +18,6 @@ function Cart({ cart, items, dispatch }) {
   const [apiError, setApiError] = useState('');
   const debounceRef = useRef(null);
   const zipRef = useRef(null);
-  // const [renderCounter, setRenderCount] = useState(0);
 
   const subTotal = isEmployeeOfTheMonth ? 0 : cart.reduce((acc, item) => {
     const detailItem = items.find((i) => i.itemId === item.id.itemId);
@@ -32,8 +31,6 @@ function Cart({ cart, items, dispatch }) {
   const total = subTotal + tax;
   const isFormValid = zipCode.length === 5 && name.trim();
 
-  // console.log('tax: ', tax);
-
   const submitOrder = async (event) => {
     event.preventDefault();
     setIsSubmitting(true);
@@ -45,7 +42,6 @@ function Cart({ cart, items, dispatch }) {
         phone,
         zipCode,
       });
-      // console.log('Order Submitted');
       dispatch({ type: CartTypes.EMPTY });
       setShowSuccessAlert(true);
     } catch (error) {
@@ -85,8 +81,6 @@ function Cart({ cart, items, dispatch }) {
       axios.get(`api/employees/isEmployeeOfTheMonth?name=${newName}`).then((response) => setIsEmployeeOfTheMonth(response?.data?.isEmployeeOfTheMonth)).catch(console.error);
     }, 300);
   };
-  // console.log(cart);
-  // console.log({ items });
 
   return (
     <div className="cart-component">
