@@ -4,6 +4,7 @@ const findItem = (cart, itemId) => cart.find((item) => item.id.itemId === itemId
 
 export const CartTypes = {
   ADD: 'ADD',
+  EMPTY: 'EMPTY',
   REMOVE: 'REMOVE',
 };
 
@@ -21,6 +22,8 @@ export const cartReducer = (state, action) => {
         ...state,
         { id: action.itemId, quantity: 1 },
       ];
+    case CartTypes.EMPTY:
+      return [];
     case CartTypes.REMOVE:
       return state.filter((item) => item.id.itemId !== action.itemId);
     default:

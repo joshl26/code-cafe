@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { useState, useRef } from 'react';
 import ItemType from '../types/item';
 import './Cart.css';
+import Alert from './Alert';
+import { CartTypes } from '../reducers/cartReducer';
 import CartRow from './CartRow';
 
 function Cart({ cart, items, dispatch }) {
@@ -11,6 +13,9 @@ function Cart({ cart, items, dispatch }) {
   const [phone, setPhone] = useState('');
   const [zipCode, setZipCode] = useState('');
   const [isEmployeeOfTheMonth, setIsEmployeeOfTheMonth] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+  const [apiError, setApiError] = useState('');
   const debounceRef = useRef(null);
   const zipRef = useRef(null);
   // const [renderCounter, setRenderCount] = useState(0);
@@ -29,15 +34,26 @@ function Cart({ cart, items, dispatch }) {
 
   // console.log('tax: ', tax);
 
-  const submitOrder = (event) => {
+  const submitOrder = async (event) => {
     event.preventDefault();
-    // console.log('name: ', name);
-    // console.log('phone: ', phone);
-    // console.log('zipcode: ', zipCode);
-    // setRenderCount(renderCounter + 1);
-    // console.log('Render Counter: ', renderCounter.current);
-    // renderCounter.current += 1;
-    // TODO
+    setIsSubmitting(true);
+    setApiError('');
+    try {
+      await axios.post('/api/orders', {
+        items: cart,
+        name,
+        phone,
+        zipCode,
+      });
+      // console.log('Order Submitted');
+      dispatch({ type: CartTypes.EMPTY });
+      setShowSuccessAlert(true);
+    } catch (error) {
+      console.error('Error submitting order', error);
+      setApiError(error?.response?.data?.error || 'Unknown error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const setFormattedPhone = (newNumber) => {
@@ -74,6 +90,12 @@ function Cart({ cart, items, dispatch }) {
 
   return (
     <div className="cart-component">
+      <Alert visible={showSuccessAlert} type="success">Thank you for your order!</Alert>
+      <Alert visible={!!apiError} type="error">
+        <p>There was an error submitting your order.</p>
+        <p>{apiError}</p>
+        <p>Please try again.</p>
+      </Alert>
       <h2>Your Cart</h2>
       {cart.length === 0 ? (
         <div>Your cart is empty.</div>
@@ -128,7 +150,7 @@ function Cart({ cart, items, dispatch }) {
               Zip Code
               <input id="zipcode" type="text" maxLength="5" inputMode="numeric" required ref={zipRef} />
             </label>
-            <button type="submit" disabled={!isFormValid}>
+            <button type="submit" disabled={!isFormValid || isSubmitting}>
               Order Now
             </button>
           </form>
