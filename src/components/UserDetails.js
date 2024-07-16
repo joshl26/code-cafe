@@ -17,12 +17,13 @@ function UserDetails() {
       console.error(error);
     }
   };
-  console.log(currentUser.username);
+  console.log(currentUser.access);
 
   return (
     <div className="user-details-component">
       { currentUser.username !== undefined ? (
         <div>
+          { currentUser.access === 'associate' ? <Link to="/orders">Orders</Link> : null }
           <img src={Profile} alt="profile" />
           <p>{currentUser?.username}</p>
           <button type="button" onClick={logout}>Log Out</button>

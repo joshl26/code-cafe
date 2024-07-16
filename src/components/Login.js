@@ -4,11 +4,13 @@ import { useContext, useState } from 'react';
 import './Login.css';
 import { useNavigate } from 'react-router-dom';
 import CurrentUserContext from '../contexts/CurrentUserContext';
+import Alert from './Alert';
 
 function Login() {
   const { setCurrentUser } = useContext(CurrentUserContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [apiError, setApiError] = useState('');
 
   const navigate = useNavigate();
 
@@ -20,11 +22,17 @@ function Login() {
       navigate('/');
     } catch (error) {
       console.error(error);
+      setApiError(error?.response?.data?.error || 'Unknown Error');
     }
   };
 
   return (
     <div className="login-component">
+      <Alert visible={!!apiError} type="error">
+        <p>There was an error logging in.</p>
+        <p>{ apiError }</p>
+        <p>Please try again.</p>
+      </Alert>
       <h2>Log In</h2>
       <form onSubmit={login}>
         <div>

@@ -13,6 +13,7 @@ import Cart from './components/Cart';
 import { cartReducer, CartTypes, initialCartState } from './reducers/cartReducer';
 import CurrentUserContext from './contexts/CurrentUserContext';
 import Login from './components/Login';
+import Orders from './components/Orders';
 
 const storageKey = 'cart';
 
@@ -64,6 +65,7 @@ function App() {
               </Route>
               <Route path="/" element={<Home items={items} />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/orders" element={<Orders items={items} />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           )}
