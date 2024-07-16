@@ -1,5 +1,7 @@
+/* eslint-disable import/no-extraneous-dependencies */
+import axios from 'axios';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import ItemType from '../types/item';
 import './Cart.css';
 import CartRow from './CartRow';
@@ -8,8 +10,12 @@ function Cart({ cart, items, dispatch }) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [zipCode, setZipCode] = useState('');
+  const [isEmployeeOfTheMonth, setIsEmployeeOfTheMonth] = useState(false);
+  const debounceRef = useRef(null);
+  const zipRef = useRef(null);
+  // const [renderCounter, setRenderCount] = useState(0);
 
-  const subTotal = cart.reduce((acc, item) => {
+  const subTotal = isEmployeeOfTheMonth ? 0 : cart.reduce((acc, item) => {
     const detailItem = items.find((i) => i.itemId === item.id.itemId);
     const itemPrice = detailItem.salePrice ?? detailItem.price;
     return item.quantity * itemPrice + acc;
@@ -21,13 +27,17 @@ function Cart({ cart, items, dispatch }) {
   const total = subTotal + tax;
   const isFormValid = zipCode.length === 5 && name.trim();
 
-  console.log('tax: ', tax);
+  // console.log('tax: ', tax);
 
   const submitOrder = (event) => {
     event.preventDefault();
-    console.log('name: ', name);
-    console.log('phone: ', phone);
-    console.log('zipcode: ', zipCode);
+    // console.log('name: ', name);
+    // console.log('phone: ', phone);
+    // console.log('zipcode: ', zipCode);
+    // setRenderCount(renderCounter + 1);
+    // console.log('Render Counter: ', renderCounter.current);
+    // renderCounter.current += 1;
+    // TODO
   };
 
   const setFormattedPhone = (newNumber) => {
@@ -43,7 +53,21 @@ function Cart({ cart, items, dispatch }) {
     } else if (digits.length > 6) {
       formatted = `${formatted}-${digits.substring(6, 10)}`;
     }
+    if (digits.length === 10) {
+      zipRef.current.focus();
+    }
     setPhone(formatted);
+  };
+
+  const onNameChange = (newName) => {
+    setName(newName);
+
+    if (debounceRef) {
+      clearTimeout(debounceRef.current);
+    }
+    debounceRef.current = setTimeout(() => {
+      axios.get(`api/employees/isEmployeeOfTheMonth?name=${newName}`).then((response) => setIsEmployeeOfTheMonth(response?.data?.isEmployeeOfTheMonth)).catch(console.error);
+    }, 300);
   };
   // console.log(cart);
   // console.log({ items });
@@ -94,15 +118,15 @@ function Cart({ cart, items, dispatch }) {
           <form onSubmit={submitOrder}>
             <label htmlFor="name">
               Name
-              <input id="name" type="text" value={name} onChange={(event) => setName(event.target.value)} required />
+              <input id="name" type="text" value={name} onChange={(event) => onNameChange(event.target.value)} required />
             </label>
             <label htmlFor="phone">
               Phone Number
-              <input id="phone" type="tel" value={phone} onChange={(event) => setFormattedPhone(event.target.value)} />
+              <input id="phone" type="tel" value={phone} onChange={(event) => setFormattedPhone(event.target.value)} aria-label="Enter your phone number. After a phone number is entered, you will automatically be moved to the next field." />
             </label>
             <label htmlFor="zipcode" value={zipCode} onChange={(event) => setZipCode(event.target.value)}>
               Zip Code
-              <input id="zipcode" type="text" maxLength="5" inputMode="numeric" required />
+              <input id="zipcode" type="text" maxLength="5" inputMode="numeric" required ref={zipRef} />
             </label>
             <button type="submit" disabled={!isFormValid}>
               Order Now

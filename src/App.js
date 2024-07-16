@@ -5,17 +5,31 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Home from './components/Home';
 import NotFound from './components/NotFound';
-import { cartReducer, CartTypes, initialCartState } from './reducers/cartReducer';
 import Details from './components/Details';
 import DetailItem from './components/DetailItem';
 import Cart from './components/Cart';
+import { cartReducer, CartTypes, initialCartState } from './reducers/cartReducer';
+
+const storageKey = 'cart';
 
 function App() {
   const [items, setItems] = useState([]);
 
-  const [cart, dispatch] = useReducer(cartReducer, initialCartState);
+  const [cart, dispatch] = useReducer(cartReducer, initialCartState, (initialState) => {
+    try {
+      const storedCart = JSON.parse(localStorage.getItem(storageKey));
+      return storedCart || initialState;
+    } catch (error) {
+      console.log(error);
+      return initialState;
+    }
+  });
 
   const addToCart = (itemId) => dispatch({ type: CartTypes.ADD, itemId });
+
+  useEffect(() => {
+    localStorage.setItem(storageKey, JSON.stringify(cart));
+  }, [cart]);
 
   useEffect(() => {
     axios.get('/api/items')
