@@ -1,15 +1,32 @@
-/* eslint-disable no-unused-vars */
-import { useState } from 'react';
+/* eslint-disable import/no-extraneous-dependencies */
+import axios from 'axios';
+import { useContext, useState } from 'react';
 import './Login.css';
+import { useNavigate } from 'react-router-dom';
+import CurrentUserContext from '../contexts/CurrentUserContext';
 
 function Login() {
+  const { setCurrentUser } = useContext(CurrentUserContext);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
+
+  const login = async (event) => {
+    event.preventDefault();
+    try {
+      const result = await axios.post('/api/auth/login', { username, password });
+      setCurrentUser(result.data);
+      navigate('/');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div className="login-component">
       <h2>Log In</h2>
-      <form>
+      <form onSubmit={login}>
         <div>
           <label htmlFor="username">
             Username

@@ -1,19 +1,31 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import CurrentUserContext from '../contexts/CurrentUserContext';
 import Profile from '../images/profile.svg';
 import './UserDetails.css';
 
 function UserDetails() {
-  const { currentUser } = useContext(CurrentUserContext);
+  const { currentUser, setCurrentUser } = useContext(CurrentUserContext);
+
+  const logout = async () => {
+    try {
+      await axios.post('/api/auth/logout', {});
+      setCurrentUser({});
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  console.log(currentUser.username);
 
   return (
     <div className="user-details-component">
-      { currentUser.username ? (
+      { currentUser.username !== undefined ? (
         <div>
           <img src={Profile} alt="profile" />
-          <p>{currentUser}</p>
+          <p>{currentUser?.username}</p>
+          <button type="button" onClick={logout}>Log Out</button>
         </div>
       ) : <Link to="/login">Log In</Link>}
     </div>
