@@ -1,7 +1,7 @@
 export const initialCartState = [];
 
 const findItem = (cart, itemId) => {
-  console.log(cart, itemId);
+  // console.log(cart, itemId);
   cart.find((item) => item.id.itemId === itemId);
 };
 
@@ -12,9 +12,6 @@ export const CartTypes = {
 };
 
 export const cartReducer = (state, action) => {
-  // console.log(state);
-  // console.log(action);
-
   switch (action.type) {
     case CartTypes.ADD:
       if (findItem(state, action.itemId)) {
