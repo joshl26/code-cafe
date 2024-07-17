@@ -1,12 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies */
+import { memo } from 'react';
 import { useParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { itemImages } from '../items';
 import './DetailItem.css';
 import ItemType from '../types/item';
 
-function DetailItem({ addToCart, items }) {
-  const { id } = useParams();
+function DetailItem({ addToCart, items, id }) {
+  // const { id } = useParams();
   const detailItem = items.find((item) => item.itemId === id);
 
   const addItemToCart = () => {
@@ -31,9 +32,25 @@ function DetailItem({ addToCart, items }) {
   );
 }
 
-DetailItem.propTypes = {
+const sharedProps = {
   addToCart: PropTypes.func.isRequired,
   items: PropTypes.arrayOf(ItemType).isRequired,
 };
 
-export default DetailItem;
+DetailItem.propTypes = {
+  ...sharedProps,
+  id: PropTypes.string.isRequired,
+};
+
+const DetailItemMemo = memo(DetailItem);
+
+function DetailsOuter({ addToCart, items }) {
+  const { id } = useParams();
+  return (
+    <DetailItemMemo addToCart={addToCart} id={id} items={items} />
+  );
+}
+
+DetailsOuter.propTypes = sharedProps;
+
+export default DetailsOuter;

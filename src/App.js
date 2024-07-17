@@ -2,6 +2,7 @@
 import axios from 'axios';
 import {
   useEffect, useState, useReducer, useMemo,
+  useCallback,
 } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
@@ -30,7 +31,7 @@ function App() {
     }
   });
 
-  const addToCart = (itemId) => dispatch({ type: CartTypes.ADD, itemId });
+  const addToCart = useCallback((itemId) => dispatch({ type: CartTypes.ADD, itemId }), []);
 
   useEffect(() => {
     localStorage.setItem(storageKey, JSON.stringify(cart));
