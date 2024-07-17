@@ -1,6 +1,9 @@
 export const initialCartState = [];
 
-const findItem = (cart, itemId) => cart.find((item) => item.id.itemId === itemId);
+const findItem = (cart, itemId) => {
+  console.log(cart, itemId);
+  cart.find((item) => item.id.itemId === itemId);
+};
 
 export const CartTypes = {
   ADD: 'ADD',
