@@ -3,11 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@testing-library/cypress": "^8.0.3",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.2.0",
     "axios": "^0.27.2",
+    "cypress": "^10.8.0",
     "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-cypress": "^2.12.1",
     "http-proxy-middleware": "^2.0.1",
     "msw": "^0.47.4",
     "prop-types": "^15.8.1",
@@ -18,10 +21,12 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "lint": "eslint src --max-warnings=0",
+    "lint": "eslint cypress.config.js cypress src --max-warnings=0",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

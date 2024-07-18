@@ -7,6 +7,13 @@ import { items } from '../items';
 import server from '../mocks/server';
 
 describe('Cart Errors', () => {
+  beforeEach(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    console.error.mockRestore();
+  });
   it('shows checkout failure error', async () => {
     const testErrorMessage = 'Code Café is closed';
     server.use(
@@ -20,5 +27,14 @@ describe('Cart Errors', () => {
       <Cart cart={cart} dispatch={dispatch} items={items} />,
     );
     expect(screen.getByRole('button', { name: /Order Now/i })).toBeDisabled();
+    await userEvent.type(screen.getByLabelText(/Name/i), 'Big Nerd Ranch');
+    await userEvent.type(screen.getByLabelText(/ZIP COde/i), '30316');
+    expect(screen.getByRole('button', { name: /Order Now/i })).toBeEnabled();
+    await userEvent.click(screen.getByRole('button', { name: /Order Now/i }));
+    await waitFor(() => {
+      expect(screen.getByText(testErrorMessage)).toBeVisible();
+    });
+    expect(dispatch).not.toHaveBeenCalled();
+    expect(console.error).toHaveBeenCalledTimes(1);
   });
 });
