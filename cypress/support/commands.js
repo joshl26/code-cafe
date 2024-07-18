@@ -25,3 +25,19 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 import '@testing-library/cypress/add-commands'
+
+Cypress.Commands.add('login', (username = 'Tester', password = 'pass') => {
+  cy.findByRole('link', { name: /Log In/i }).click();
+  cy.findByLabelText(/Username/i).type(username);
+  cy.findByLabelText(/Password/i).type(password);
+  cy.findByRole('button', { name: /Log In/i }).click();
+});
+
+Cypress.Commands.add('checkout', (name = 'Customer', zipcode = "30316") => {
+  cy.findByRole('link', { name: /Tea/i }).click();
+  cy.findByRole('button', { name: /Add to Cart/i }).click();
+  cy.findByRole('link', { name: /Cart/i }).click();
+  cy.findByLabelText(/Name/i).type(name);
+  cy.findByLabelText(/ZIP Code/i).type(zipcode);
+  cy.findByRole('button', { name: /Order Now/i }).click();
+});
